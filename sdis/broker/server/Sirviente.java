@@ -36,21 +36,24 @@ public class Sirviente implements Runnable {
             boolean fin = false;
             boolean authored = false;
             MensajeProtocolo ms;
-            managerConexiones.registraIntento(clientIP);
-            System.out.println("[BM] (connections) for " +  clientIP + " = " + managerConexiones.getIntentos(clientIP));
+
             if (managerConexiones.isIPBaneada(clientIP)) {
                 ms = new MensajeProtocolo(Primitiva.ERROR, Strings.MAX_CONNECTIONS_REACHED_ERROR);
                 oos.writeObject(ms);
                 fin = true;
             }else if(managerLogins.isIPBaneada(clientIP)){
+                managerConexiones.registraIntento(clientIP);
                 ms = new MensajeProtocolo(Primitiva.ERROR, Strings.MAX_LOGIN_ATTEMPTS_REACHED_ERROR);
                 oos.writeObject(ms);
                 fin = true;
             }
             else{
+                managerConexiones.registraIntento(clientIP);
+                System.out.println("[BM] (connections) for " +  clientIP + " = " + managerConexiones.getIntentos(clientIP));
                 ms = new MensajeProtocolo(Primitiva.INFO, Strings.WELCOME_MESSAGE);
                 oos.writeObject(ms);
             }
+
             while (!fin) {
                 String mensaje;  //String multipurpose
                 MensajeProtocolo me = (MensajeProtocolo) ois.readObject();
@@ -73,6 +76,7 @@ public class Sirviente implements Runnable {
                                 fin =  true;
                             } else {
                                 ms = new MensajeProtocolo(Primitiva.NOTAUTH, Strings.LOGIN_ERROR);
+                                System.out.println("[BM] (login fails) for " +  clientIP + " = " + managerLogins.getIntentos(clientIP));
                                 oos.writeObject(ms);
                             }
                         }
@@ -149,8 +153,8 @@ public class Sirviente implements Runnable {
 
         }
         managerConexiones.clientedesconectado(clientIP);
-        System.out.println("[BM] (connections) for " +  clientIP + " = " + managerConexiones.getIntentos(clientIP));
         System.out.println("Cliente desconectado. Usuario asociado = " + userlogged);
+        System.out.println("[BM] (connections) for " +  clientIP + " = " + managerConexiones.getIntentos(clientIP));
         Servidor.ClientesUsados--;
 
 
