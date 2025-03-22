@@ -5,7 +5,7 @@ public class BlacklistManager {
     private final int intentosMaximos;
 
     public BlacklistManager(int intentosMaximos) {
-        this.intentosMaximos = intentosMaximos;
+        this.intentosMaximos = intentosMaximos+1;
     }
 
     public synchronized boolean isIPBaneada(String direccionIp) {
