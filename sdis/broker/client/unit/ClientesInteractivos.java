@@ -1,7 +1,7 @@
-package sdis.modulo2.client;
+package sdis.broker.client;
 
 
-import sdis.modulo2.common.*;
+import sdis.broker.common.*;
 
 public class ClientesInteractivos {
     final private int PUERTO = 2000;
@@ -16,6 +16,7 @@ public class ClientesInteractivos {
                     new java.io.BufferedReader(
                             new java.io.InputStreamReader(System.in));
             //Creación de los canales de serialización de objetos
+            System.out.println("Esperando para conectarse con el servidor...");
             oos = new java.io.ObjectOutputStream(sock.getOutputStream());
             ois = new java.io.ObjectInputStream(sock.getInputStream());
             MensajeProtocolo minfo = (MensajeProtocolo) ois.readObject();
@@ -26,7 +27,7 @@ public class ClientesInteractivos {
                 System.out.println(minfo);
             }
             while(!fin){
-                System.out.println("Que desea hacer: 1-Loggear 2-Añadir canción a Playlist 3-Escuchar Playlist 4-Borrar Playlist ");
+                System.out.println("Que desea hacer: 1-Loggear 2-Enviar Mensaje 3-Leer Mensajes 4-Borrar Mensajes 5-Admin Info");
                 linea = tec.readLine();
                 if(linea.equals("1")){
                   System.out.println("Usuario: ");
@@ -41,29 +42,34 @@ public class ClientesInteractivos {
                     System.out.println("< " +mr);
                 }
                 else if (linea.equals("2")){
-                    System.out.println("Playlist: ");
+                    System.out.println("Conversacion: ");
                     String PlayList = tec.readLine();
-                    System.out.println("Canción: ");
+                    System.out.println("Mensaje: ");
                     String Song = tec.readLine();
-                    pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.ADD2L, PlayList, Song));
+                    pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.ADDMSG, PlayList, Song));
                     MensajeProtocolo mr = (MensajeProtocolo) ois.readObject();
                     System.out.println("< " +mr);
                 }
                 else if(linea.equals("3")){
-                    System.out.println("Playlist: ");
+                    System.out.println("Conversacion: ");
                     String PlayList = tec.readLine();
-                    pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.READL, PlayList));
+                    pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.READQ, PlayList));
                     MensajeProtocolo mr = (MensajeProtocolo) ois.readObject();
                     System.out.println("< " +mr);
                 }
                 else if(linea.equals("4")){
-                    System.out.println("Playlist: ");
+                    System.out.println("Conversacion: ");
                     String PlayList = tec.readLine();
-                    pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.DELETEL, PlayList));
+                    pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.DELETEQ, PlayList));
                     MensajeProtocolo mr = (MensajeProtocolo) ois.readObject();
                     System.out.println("< " +mr);
+                }
+                else if(linea.equals("5")) {
+                    pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.STATE));
+                    MensajeProtocolo mr = (MensajeProtocolo) ois.readObject();
+                    System.out.println("< " + mr);
                 }else{
-                    System.out.println("Elija una opción valida ");
+                    System.out.println("Elija una opción valida");
                 }
 
             }
