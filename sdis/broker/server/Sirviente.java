@@ -6,8 +6,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class Sirviente implements Runnable {
     private static ConcurrentHashMap<String, String> registroUsuarios = new ConcurrentHashMap<>();
-    private static BlacklistManager managerConexiones = new BlacklistManager(4);
-    private static BlacklistManager managerLogins = new BlacklistManager(3);
+    private static BlacklistManager managerConexiones = new BlacklistManager(3);
+    private static BlacklistManager managerLogins = new BlacklistManager(2);
     private final java.net.Socket socket;
     private final MultiMap<String, String> mapa;
     private final java.io.ObjectOutputStream oos;
@@ -26,14 +26,15 @@ public class Sirviente implements Runnable {
 
     public void run() {
         String clientIP = socket.getInetAddress().getHostAddress();
+        String userlogged = "NA";
         try {
-            registroUsuarios.put("hector", "1234");
-            registroUsuarios.put("sdis", "asdf");
+            registroUsuarios.put("cllamas", "qwerty");
+            registroUsuarios.put("hector", "lkjlkj");
+            registroUsuarios.put("sdis", "987123");
             registroUsuarios.put("admin","$%&/()=");
             System.out.println(Strings.SERVER_WAITING);
             boolean fin = false;
             boolean authored = false;
-            String userlogged = "";
             MensajeProtocolo ms;
             managerConexiones.registraIntento(clientIP);
             System.out.println("[BM] (connections) for " +  clientIP + " = " + managerConexiones.getIntentos(clientIP));
@@ -149,7 +150,7 @@ public class Sirviente implements Runnable {
         }
         managerConexiones.clientedesconectado(clientIP);
         System.out.println("[BM] (connections) for " +  clientIP + " = " + managerConexiones.getIntentos(clientIP));
-        System.out.println("Cliente desconectado");
+        System.out.println("Cliente desconectado. Usuario asociado = " + userlogged);
         Servidor.ClientesUsados--;
 
 
