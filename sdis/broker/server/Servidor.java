@@ -2,9 +2,12 @@ package sdis.broker.server;
 import sdis.utils.MultiMap;
 
 public class Servidor {
+    public static int NThreads = 5;   //# hilos del ThreadPool
+    public static int ClientesUsados = 0;
+    public static int pushed = 0;
+    public static int pulled = 0;
     public static void main(String args[]) {
         int PUERTO = 3000;  //puerto de servicio
-        int NThreads = 5;   //# hilos del ThreadPool
         MultiMap<String, String>
                 mapa = new MultiMap();
         java.util.concurrent.ExecutorService exec =
@@ -17,9 +20,15 @@ public class Servidor {
                     while (true) {
                         java.net.Socket socket = sock.accept();
                         try {
-                            sdis.broker.server.Sirviente serv =
-                                    new sdis.broker.server.Sirviente(socket, mapa);
-                            exec.execute(serv);
+                            if(ClientesUsados>=NThreads){
+                                System.err.println("Conexion Rechazada maximo numero de clientes");
+                            }else{
+                                sdis.broker.server.Sirviente serv =
+                                        new sdis.broker.server.Sirviente(socket, mapa);
+                                exec.execute(serv);
+                                ClientesUsados++;
+                            }
+
                         } catch (java.io.IOException ioe) {
                             System.out.println("Servidor: WHILE [ERR ObjectStreams]");
                         }
