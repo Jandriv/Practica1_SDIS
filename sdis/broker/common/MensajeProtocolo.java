@@ -8,7 +8,7 @@ public class MensajeProtocolo implements java.io.Serializable {
     private static final long serialVersionUID = 2540712323068668552L;
     // ADDED, EMPTY, DELETED
     public MensajeProtocolo(Primitiva p) throws MalMensajeProtocoloException {
-        if (p == Primitiva.ADDED || p == Primitiva.EMPTY || p == Primitiva.DELETED) {
+        if (p == Primitiva.ADDED || p == Primitiva.EMPTY || p == Primitiva.DELETED || p == Primitiva.STATE) {
             this.primitiva = p;
             this.mensaje = this.idCola = null;
         } else {
@@ -16,12 +16,12 @@ public class MensajeProtocolo implements java.io.Serializable {
         }
     }
 
-    // XAUTH, MEDIA, ERROR, NOTAUTH, INFO, READL, DELETEL
+    // XAUTH, MEDIA, ERROR, NOTAUTH, INFO, READQ, STATE, DELETEQ, BADCODE
     public MensajeProtocolo(Primitiva p, String mensaje) throws MalMensajeProtocoloException {
-        if (p == Primitiva.INFO || p == Primitiva.XAUTH || p == Primitiva.MEDIA || p == Primitiva.ERROR || p == Primitiva.NOTAUTH) {
+        if (p == Primitiva.INFO || p == Primitiva.XAUTH || p == Primitiva.MSG || p == Primitiva.ERROR || p == Primitiva.NOTAUTH || p == Primitiva.STATE || p == Primitiva.BADCODE) {
             this.mensaje = mensaje;
             this.idCola = null;
-        } else if (p == Primitiva.READL || p == Primitiva.DELETEL) {
+        } else if (p == Primitiva.READQ || p == Primitiva.DELETEQ) {
             this.mensaje = null;
             this.idCola = mensaje;
         } else{
@@ -30,9 +30,9 @@ public class MensajeProtocolo implements java.io.Serializable {
         }
         this.primitiva = p;
     }
-    // XAUTH, ADD2L
+    // XAUTH, ADDMSG
     public MensajeProtocolo(Primitiva p, String user, String pass) throws MalMensajeProtocoloException {
-        if (p == Primitiva.XAUTH || p == Primitiva.ADD2L) {
+        if (p == Primitiva.XAUTH || p == Primitiva.ADDMSG) {
 
             this.idCola = user;
             this.mensaje = pass;
@@ -71,17 +71,22 @@ public class MensajeProtocolo implements java.io.Serializable {
                     return this.primitiva + ": " + this.mensaje;
                 }
 
-            case MEDIA:
+            case MSG:
                 return this.primitiva + ": " + this.mensaje;
             case ERROR:
             case NOTAUTH:
                 return this.primitiva + ": " + this.mensaje;
-            case READL:
+            case READQ:
                 return this.primitiva+":"+this.idCola;
-            case DELETEL:
+            case DELETEQ:
                 return this.primitiva + ":" + this.idCola;
-            case ADD2L:
-                return this.primitiva + ":" + this.idCola + " song: " + this.mensaje;
+            case ADDMSG:
+                return this.primitiva + ": Conversacion" + this.idCola + " mensaje: " + this.mensaje;
+            case STATE:
+                if(this.mensaje == null){
+                    return this.primitiva.toString();
+                }
+                return this.primitiva + ": " + this.mensaje;
             default:
                 return this.primitiva.toString();
         }
