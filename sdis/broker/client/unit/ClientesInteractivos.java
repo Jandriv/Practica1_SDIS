@@ -27,7 +27,7 @@ public class ClientesInteractivos {
                 System.out.println(minfo);
             }
             while(!fin){
-                System.out.println("Que desea hacer: 1-Loggear 2-Enviar Mensaje 3-Leer Mensajes 4-Borrar Mensajes 5-Admin Info");
+                System.out.println("Que desea hacer: 1-Loggear 2-Enviar Mensaje 3-Leer Mensajes 4-Borrar Mensajes 5-Admin Info 6-Desconectar");
                 linea = tec.readLine();
                 if(linea.equals("1")){
                   System.out.println("Usuario: ");
@@ -68,6 +68,8 @@ public class ClientesInteractivos {
                     pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.STATE));
                     MensajeProtocolo mr = (MensajeProtocolo) ois.readObject();
                     System.out.println("< " + mr);
+                }else if(linea.equals("6")) {
+                    fin = true;
                 }else{
                     System.out.println("Elija una opción valida");
                 }
