@@ -29,9 +29,11 @@ public class Sirviente implements Runnable {
         try {
             registroUsuarios.put("hector", "1234");
             registroUsuarios.put("sdis", "asdf");
+            registroUsuarios.put("admin","$%&/()=");
             System.out.println(Strings.SERVER_WAITING);
             boolean fin = false;
             boolean authored = false;
+            String userlogged = "";
             MensajeProtocolo ms;
             managerConexiones.registraIntento(clientIP);
             System.out.println("[BM] (connections) for " +  clientIP + " = " + managerConexiones.getIntentos(clientIP));
@@ -60,6 +62,7 @@ public class Sirviente implements Runnable {
                         if (registroUsuarios.containsKey(username) && registroUsuarios.get(username).equals(password)) {//Si el usuario y contraseña están en el multimap
                             ms = new MensajeProtocolo(Primitiva.XAUTH, Strings.USER_LOGGED_SUCCESSFULLY);
                             authored = true;
+                            userlogged = username;
                             oos.writeObject(ms);
                         } else {
                             managerLogins.registraIntento(clientIP);
@@ -73,11 +76,12 @@ public class Sirviente implements Runnable {
                             }
                         }
                         break;
-                    case READL:
+                    case READQ:
                         mensaje = mapa.pop(me.getIdCola());
                         if (null != mensaje) {
-                            ms = new MensajeProtocolo(Primitiva.MEDIA, mensaje);
+                            ms = new MensajeProtocolo(Primitiva.MSG, mensaje);
                             System.out.println("Sirviente: " + ns + ": [ME: " + ms); // depuracion me
+                            Servidor.pulled++;
                             oos.writeObject(ms);
                         } else {
                             ms = new MensajeProtocolo(Primitiva.EMPTY);
@@ -85,7 +89,17 @@ public class Sirviente implements Runnable {
                             oos.writeObject(ms);
                         }
                         break;
-                    case DELETEL:
+
+                    case STATE:
+                        if(authored && userlogged.equals("admin")){
+                            ms = new MensajeProtocolo(Primitiva.STATE, "Hilos maximos: " + Servidor.NThreads + " Hilos ocupados: " + Servidor.ClientesUsados + " Mensajes enviados: " + Servidor.pushed + " Mensajes recibidos: " + Servidor.pulled);
+                            oos.writeObject(ms);
+                        }else{
+                            ms = new MensajeProtocolo(Primitiva.NOTAUTH, Strings.NO_ADMIN);
+                            oos.writeObject(ms);
+                        }
+                        break;
+                    case DELETEQ:
                         if(authored){
                             if (null == (mensaje = mapa.pop(me.getIdCola()))) {
                                 ms = new MensajeProtocolo(Primitiva.EMPTY);
@@ -105,7 +119,7 @@ public class Sirviente implements Runnable {
                             oos.writeObject(ms);
                         }
                         break;
-                    case ADD2L:
+                    case ADDMSG:
                         if (authored){
                             mapa.push(me.getIdCola(), me.getMensaje());
                             synchronized (mapa) {
@@ -113,6 +127,7 @@ public class Sirviente implements Runnable {
                             }  //despierta un sirviente esperando en un bloqueo de "mapa"
                             ms = new MensajeProtocolo(Primitiva.ADDED);
                             System.out.println("Sirviente: " + ns + ": [ME: " + ms); // depuracion me
+                            Servidor.pushed++;
                             oos.writeObject(ms);
                         }
                         else{
@@ -120,6 +135,9 @@ public class Sirviente implements Runnable {
                             oos.writeObject(ms);
                         }
                         break;
+                    default:
+                        ms = new MensajeProtocolo(Primitiva.BADCODE, Strings.UNEXPECTTED_ERROR);
+                        oos.writeObject(ms);
 
 
                 }  //fin del selector segun el mensaje entrante
@@ -132,6 +150,8 @@ public class Sirviente implements Runnable {
         managerConexiones.clientedesconectado(clientIP);
         System.out.println("[BM] (connections) for " +  clientIP + " = " + managerConexiones.getIntentos(clientIP));
         System.out.println("Cliente desconectado");
+        Servidor.ClientesUsados--;
+
 
     }
 }
