@@ -20,7 +20,7 @@ public class Servidor {
                     while (true) {
                         java.net.Socket socket = sock.accept();
                         try {
-                            if(ClientesUsados>=NThreads){
+                            if(ClientesUsados>=NThreads*2){
                                 System.err.println("Conexion Rechazada maximo numero de clientes");
                             }else{
                                 sdis.broker.server.Sirviente serv =
