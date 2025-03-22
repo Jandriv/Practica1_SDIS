@@ -19,4 +19,6 @@ public class Strings {
     public static final String LOGIN_REQUIRED = "User login is required";
     public static final String MAX_CONNECTIONS_REACHED_ERROR = "Err Max Number of connections reached.";
     public static final String MAX_LOGIN_ATTEMPTS_REACHED_ERROR = "Err Max Number of login attempts reached.";
+    public static final String NO_ADMIN = "NO ADMIN";
+    public static final String UNEXPECTTED_ERROR = "Unexpected error";
 }
