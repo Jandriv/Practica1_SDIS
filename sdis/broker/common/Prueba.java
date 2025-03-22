@@ -5,19 +5,19 @@ public class Prueba {
         try {
             MensajeProtocolo mp = new MensajeProtocolo(Primitiva.INFO, "hola") ;
             System.out.println(mp);
-            mp = new MensajeProtocolo(Primitiva.READL, "ca") ;
+            mp = new MensajeProtocolo(Primitiva.READQ, "ca") ;
             System.out.println(mp);
-            mp = new MensajeProtocolo(Primitiva.READL, "cb") ;
+            mp = new MensajeProtocolo(Primitiva.READQ, "cb") ;
             System.out.println(mp);
-            mp = new MensajeProtocolo(Primitiva.MEDIA, "mens") ;
+            mp = new MensajeProtocolo(Primitiva.MSG, "mens") ;
             System.out.println(mp);
-            mp = new MensajeProtocolo(Primitiva.ADD2L, "c1", "m1.1") ;
+            mp = new MensajeProtocolo(Primitiva.ADDMSG, "c1", "m1.1") ;
             System.out.println(mp);
             mp = new MensajeProtocolo(Primitiva.ADDED) ;
             System.out.println(mp);
             mp = new MensajeProtocolo(Primitiva.EMPTY) ;
             System.out.println(mp);
-            mp = new MensajeProtocolo(Primitiva.READL) ;
+            mp = new MensajeProtocolo(Primitiva.READQ) ;
             System.out.println(mp);
         } catch (MalMensajeProtocoloException mmpe) {
             System.err.println(mmpe) ;
