@@ -9,8 +9,9 @@ public class Servidor {
     private static BlacklistManager managerLogins = new BlacklistManager(3);
 
     public static void main(String[] args) {
-        almacenamiento.put("hector", "1234");
-        almacenamiento.put("sdis", "asdf");
+        almacenamiento.put("cllamas", "qwerty");
+        almacenamiento.put("hector", "lkjlkj");
+        almacenamiento.put("sdis", "987123");
         final String[] lastLoggedInUser = {"No user logged in"};
         //PUERTO
         try (java.net.ServerSocket servidor = new java.net.ServerSocket(PUERTO, 0, java.net.InetAddress.getByName("0.0.0.0"))) {
