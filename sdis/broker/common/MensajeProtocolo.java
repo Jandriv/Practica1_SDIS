@@ -77,11 +77,11 @@ public class MensajeProtocolo implements java.io.Serializable {
             case NOTAUTH:
                 return this.primitiva + ": " + this.mensaje;
             case READQ:
-                return this.primitiva+":"+this.idCola;
+                return this.primitiva+": "+this.idCola;
             case DELETEQ:
                 return this.primitiva + ":" + this.idCola;
             case ADDMSG:
-                return this.primitiva + ": Conversacion" + this.idCola + " mensaje: " + this.mensaje;
+                return this.primitiva + ": Conversacion: " + this.idCola + " mensaje: " + this.mensaje;
             case STATE:
                 if(this.mensaje == null){
                     return this.primitiva.toString();
