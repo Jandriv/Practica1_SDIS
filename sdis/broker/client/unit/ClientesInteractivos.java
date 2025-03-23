@@ -42,22 +42,22 @@ public class ClientesInteractivos {
                     System.out.println("< " + mr);
                 } else if (linea.equals("2")) {
                     System.out.println("Conversacion: ");
-                    String PlayList = tec.readLine();
+                    String Conversacion = tec.readLine();
                     System.out.println("Mensaje: ");
-                    String Song = tec.readLine();
-                    pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.ADDMSG, PlayList, Song));
+                    String Mensaje = tec.readLine();
+                    pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.ADDMSG, Conversacion, Mensaje));
                     MensajeProtocolo mr = (MensajeProtocolo) ois.readObject();
                     System.out.println("< " + mr);
                 } else if (linea.equals("3")) {
                     System.out.println("Conversacion: ");
-                    String PlayList = tec.readLine();
-                    pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.READQ, PlayList));
+                    String Conversacion = tec.readLine();
+                    pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.READQ, Conversacion));
                     MensajeProtocolo mr = (MensajeProtocolo) ois.readObject();
                     System.out.println("< " + mr);
                 } else if (linea.equals("4")) {
                     System.out.println("Conversacion: ");
-                    String PlayList = tec.readLine();
-                    pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.DELETEQ, PlayList));
+                    String Conversacion = tec.readLine();
+                    pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.DELETEQ, Conversacion));
                     MensajeProtocolo mr = (MensajeProtocolo) ois.readObject();
                     System.out.println("< " + mr);
                 } else if (linea.equals("5")) {
