@@ -17,16 +17,18 @@ public class AuthAddMsg {
 	static ObjectInputStream ois;
     public static void main(String args[]) throws IOException {
         java.net.Socket sock = new java.net.Socket("localhost", 3000);
-        
+        boolean fin = false;
 		try {
         	oos = new java.io.ObjectOutputStream(sock.getOutputStream());
             ois = new java.io.ObjectInputStream(sock.getInputStream());
             MensajeProtocolo minfo = (MensajeProtocolo) ois.readObject();
             if (minfo.getPrimitiva().equals(Primitiva.ERROR)) {
                 System.out.println(minfo);
-                boolean fin = true;
+                 fin = true;
             }else {
                 System.out.println(minfo);
+            }if(!fin) {
+            	
             }
             pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.XAUTH, "admin", "$%&/()="));
            	MensajeProtocolo mr = (MensajeProtocolo) ois.readObject();
@@ -34,15 +36,13 @@ public class AuthAddMsg {
            	pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.ADDMSG, "Bienvenida", "Hola buenas tardes"));
            	mr = (MensajeProtocolo) ois.readObject();
            	System.out.println("< " + mr);
-        } catch (java.rmi.RemoteException re) {
-            System.err.println("<Cliente: Excepción RMI:" + re);
-            re.printStackTrace();
-
         } catch (Exception e) {
             System.err.println("<Cliente: Excepcion: " + e);
             e.printStackTrace();
 
         }finally {
+        	oos.close();
+        	ois.close();
         	sock.close();
         }
     }
