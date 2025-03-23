@@ -1,4 +1,4 @@
-package sdis.broker.client.unit;
+package sdis.broker.client;
 
 import sdis.broker.common.*;
 
