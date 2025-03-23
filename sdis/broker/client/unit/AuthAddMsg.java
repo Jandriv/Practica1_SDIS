@@ -27,15 +27,29 @@ public class AuthAddMsg {
                  fin = true;
             }else {
                 System.out.println(minfo);
-            }if(!fin) {
-            	
             }
-            pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.XAUTH, "admin", "$%&/()="));
-           	MensajeProtocolo mr = (MensajeProtocolo) ois.readObject();
-           	System.out.println("< " + mr);
-           	pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.ADDMSG, "Bienvenida", "Hola buenas tardes"));
-           	mr = (MensajeProtocolo) ois.readObject();
-           	System.out.println("< " + mr);
+            if(args.length== 0 && !fin) {
+            	pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.XAUTH, "admin", "$%&/()="));
+               	MensajeProtocolo mr = (MensajeProtocolo) ois.readObject();
+               	System.out.println("< " + mr);
+               	pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.ADDMSG, "Bienvenida", "Hola buenas tardes"));
+               	mr = (MensajeProtocolo) ois.readObject();
+               	System.out.println("< " + mr);
+            }else if(args.length== 2 && !fin) {
+            	pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.XAUTH, "admin", "$%&/()="));
+               	MensajeProtocolo mr = (MensajeProtocolo) ois.readObject();
+               	System.out.println("< " + mr);
+               	String conversacion = args[0];
+        		String mensaje = args[1];
+        		pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.ADDMSG, conversacion, mensaje));
+               	mr = (MensajeProtocolo) ois.readObject();
+               	System.out.println("< " + mr);
+            	
+            }else {
+            	System.out.println("Es posible que haya habido un fallo de conexion. Pruebe mas tarde o no introduzca argumentos o introduzca: conversacion mensaje");
+            }
+            
+            
         } catch (Exception e) {
             System.err.println("<Cliente: Excepcion: " + e);
             e.printStackTrace();

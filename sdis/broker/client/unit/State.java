@@ -9,46 +9,46 @@ import sdis.broker.common.MensajeProtocolo;
 import sdis.broker.common.Primitiva;
 
 public class State {
-
-    static ObjectOutputStream oos;
-    static ObjectInputStream ois;
-
+    //Ejemplo
+	static ObjectOutputStream oos;
+	static ObjectInputStream ois;
     public static void main(String args[]) throws IOException {
         java.net.Socket sock = new java.net.Socket("localhost", 3000);
         boolean fin = false;
-        try {
-            oos = new java.io.ObjectOutputStream(sock.getOutputStream());
+		try {
+        	oos = new java.io.ObjectOutputStream(sock.getOutputStream());
             ois = new java.io.ObjectInputStream(sock.getInputStream());
             MensajeProtocolo minfo = (MensajeProtocolo) ois.readObject();
             if (minfo.getPrimitiva().equals(Primitiva.ERROR)) {
                 System.out.println(minfo);
-                fin = true;
-            } else {
+                 fin = true;
+            }else {
                 System.out.println(minfo);
             }
-            if (!fin) {
-                // Enviar solicitud de tipo STATE
-                pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.STATE,
-                        "Hilos maximos: 3,  Hilos ocupados: 2, Mensajes enviados: 2, Mensajes recibidos: 1"));
-                MensajeProtocolo mr = (MensajeProtocolo) ois.readObject();
-                System.out.println("< " + mr);
+            if(args.length== 0 && !fin) {
+               	pruebaPeticionRespuesta(new MensajeProtocolo(Primitiva.STATE));
+               	MensajeProtocolo mr = (MensajeProtocolo) ois.readObject();
+               	System.out.println("< " + mr);
+            }else {
+            	System.out.println("Es posible que haya habido un fallo de conexion. Pruebe mas tarde o no introduzca argumentos ");
             }
-
+            
+            
         } catch (Exception e) {
             System.err.println("<Cliente: Excepcion: " + e);
             e.printStackTrace();
 
-        } finally {
-            oos.close();
-            ois.close();
-            sock.close();
+        }finally {
+        	oos.close();
+        	ois.close();
+        	sock.close();
         }
     }
-
-    // Prueba una interacción de escritura y lectura con el servidor
-    static void pruebaPeticionRespuesta(MensajeProtocolo mp)
+	// Prueba una interacción de escritura y lectura con el servidor
+     static void pruebaPeticionRespuesta(MensajeProtocolo mp)
             throws java.io.IOException, MalMensajeProtocoloException, ClassNotFoundException {
         System.out.println("> " + mp);
         oos.writeObject(mp);
+
     }
 }
