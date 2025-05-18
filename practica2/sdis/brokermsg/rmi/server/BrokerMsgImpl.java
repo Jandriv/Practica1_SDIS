@@ -97,6 +97,10 @@ public class BrokerMsgImpl extends UnicastRemoteObject implements BrokerMsg{
     @Override
     public String getQueueList(String Token) throws RemoteException, NotAuthException {
         authenticator.checkToken(Token);
-        return "hola";
+        String mensaje = "";
+        for(String Cola : mapa.keySet()){
+            mensaje = mensaje.concat(Cola + " ");
+        }
+        return mensaje;
     }
 }
