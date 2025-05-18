@@ -24,6 +24,11 @@ public class MultiMap<K, T> {
         return (null != cola) ? cola.poll() : null;
     }
 
+    public T peek(K clave) {
+        ConcurrentLinkedQueue<T> cola = map.get(clave);
+        return (null != cola) ? cola.peek() : null;
+    }
+
     public boolean containsKey(K clave) {
         return map.containsKey(clave);
     }

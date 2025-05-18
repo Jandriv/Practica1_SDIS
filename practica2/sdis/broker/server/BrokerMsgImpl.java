@@ -9,9 +9,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import sdis.broker.common.Strings;
 import sdis.utils.MultiMap;
 
-public class BrokerMsgImpl extends UnicastRemoteObject implements BrokerMsg{
+public class BrokerMsgImpl extends UnicastRemoteObject implements BrokerMsg {
     private ConcurrentHashMap<String, String> registroUsuarios;
     private final MultiMap<String, String> mapa;
+
     protected BrokerMsgImpl() throws RemoteException {
         super();
         this.mapa = new MultiMap<>();
@@ -19,7 +20,7 @@ public class BrokerMsgImpl extends UnicastRemoteObject implements BrokerMsg{
         registroUsuarios.put("cllamas", "qwerty");
         registroUsuarios.put("hector", "lkjlkj");
         registroUsuarios.put("sdis", "987123");
-        registroUsuarios.put("admin","$%&/()=");
+        registroUsuarios.put("admin", "$%&/()=");
     }
 
     @Override
@@ -29,9 +30,12 @@ public class BrokerMsgImpl extends UnicastRemoteObject implements BrokerMsg{
 
     @Override
     public String auth(String username, String password) throws RemoteException {
-        if (registroUsuarios.containsKey(username) && registroUsuarios.get(username).equals(password)) {//Si el usuario y contraseña están en el multimap
+        if (registroUsuarios.containsKey(username) && registroUsuarios.get(username).equals(password)) {// Si el usuario
+                                                                                                        // y contraseña
+                                                                                                        // están en el
+                                                                                                        // multimap
             return Strings.USER_LOGGED_SUCCESSFULLY;
-        }else {
+        } else {
             return Strings.USER_LOGGED_UNSUCCESFULLY;
         }
     }
@@ -43,7 +47,9 @@ public class BrokerMsgImpl extends UnicastRemoteObject implements BrokerMsg{
 
     @Override
     public void add2Q(String nombreCola, String mensaje) throws RemoteException {
-        mapa.push(nombreCola, nombreCola);
+        // mapa.push(nombreCola, nombreCola);
+        mapa.push(nombreCola, mensaje);
+
     }
 
     @Override
@@ -58,12 +64,12 @@ public class BrokerMsgImpl extends UnicastRemoteObject implements BrokerMsg{
 
     @Override
     public String peekQ() throws RemoteException {
-        return mapa.get("DEFAULT");
+        return mapa.peek("DEFAULT");
     }
 
     @Override
     public String peekQ(String nombreCola) throws RemoteException {
-        return mapa.get(nombreCola);
+        return mapa.peek(nombreCola);
     }
 
     @Override
@@ -72,7 +78,7 @@ public class BrokerMsgImpl extends UnicastRemoteObject implements BrokerMsg{
         if (null == (mensaje = mapa.pop(nombreCola))) {
             return "EMPTY";
         } else {
-            while(mensaje!= null){
+            while (mensaje != null) {
                 mensaje = mapa.pop(nombreCola);
             }
             return "DELETED";
@@ -82,6 +88,6 @@ public class BrokerMsgImpl extends UnicastRemoteObject implements BrokerMsg{
     @Override
     public String getQueueList() throws RemoteException {
 
-        return "hola" +mapa.hashCode();
+        return "hola" + mapa.hashCode();
     }
 }
